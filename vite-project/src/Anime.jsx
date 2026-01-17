@@ -2,33 +2,34 @@ import React from "react";
 import { useState, useContext } from "react";
 import axios from "axios";
 import {ListContext} from './ListContext.jsx'
+import { useToast, Toast } from './Toast.jsx'
 
 function Anime(){
-
     const [searchAnime, setSearchAnime] = useState("");
     const [data, setData] = useState([])
     const { addItemToList } = useContext(ListContext)
+    const { toasts, addToast, removeToast } = useToast()
+
     function handleSubmit(e) {
         setData([]);
         e.preventDefault();
         axios.get(`https://api.jikan.moe/v4/anime?q=${searchAnime}`)
             .then((response) => {
                 setData(response.data.data);
-                console.log(response.data.data);
-
             })
             .catch((error) => {
                 console.error('Error fetching anime data:', error);
+                addToast('Error fetching anime data', 'error')
             });
     }
     function addAnime(anime){
         addItemToList(anime)
-        console.log(anime.title_english || anime.title) 
-        alert(`${anime.title_english || anime.title} was added to your list!`)
+        addToast(`${anime.title_english || anime.title} added to your list!`, 'success')
     }
 
          return (
         <>
+        <Toast toasts={toasts} removeToast={removeToast} />
     <div className="search-container">
     <div className="search-input">
         <h2>Enter Anime</h2>

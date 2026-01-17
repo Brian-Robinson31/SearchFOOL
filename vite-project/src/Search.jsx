@@ -3,6 +3,7 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import './App.css'
 import {ListContext} from './ListContext.jsx'
+import { useToast, Toast } from './Toast.jsx'
 
 
 
@@ -11,27 +12,28 @@ function Search(){
     const [searchManga, setSearchManga] = useState("");
     const [data, setData] = useState([])
     const { addItemToList } = useContext(ListContext)
+    const { toasts, addToast, removeToast } = useToast()
     
     function handleSubmit(e) {
         e.preventDefault();
         axios.get(`https://api.jikan.moe/v4/manga?q=${searchManga}`)
             .then((response) => {
                 setData(response.data.data);
-                console.log(response.data.data);
             })
             .catch((error) => {
                 console.error('Error fetching manga data:', error);
+                addToast('Error fetching manga data', 'error')
             });
     }
     function addItem(manga){
         addItemToList(manga)
-        console.log(manga.title_english || manga.title)
-        alert(`${manga.title_english || manga.title} was added to your list!`)
+        addToast(`${manga.title_english || manga.title} added to your list!`, 'success')
     }
     
 
          return (
         <>
+        <Toast toasts={toasts} removeToast={removeToast} />
     <div className="search-container">
     <div className="search-input">
         <h2>Enter Manga</h2>

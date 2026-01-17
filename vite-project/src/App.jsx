@@ -11,7 +11,7 @@ function App(){
         <div>
             <Navbar />
             <Routes>
-                <Route path="/" element={<Search />} />
+                <Route path="/" element={<Anime />} />
                 <Route path="/anime" element={<Anime />} /> 
                 <Route path="/list" element={<ListPage />} />
             </Routes>
