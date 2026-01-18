@@ -24,12 +24,15 @@ jobs:
       
       - name: Install dependencies
         run: npm install
+        working-directory: ./vite-project
       
       - name: Build
         run: npm run build
+        working-directory: ./vite-project
       
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: npm run deploy
+        working-directory: ./vite-project
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
